@@ -1,9 +1,0 @@
-LICENSE
-README.md
-setup.py
-GeN/GeN.py
-GeN/__init__.py
-genoptimizer.egg-info/PKG-INFO
-genoptimizer.egg-info/SOURCES.txt
-genoptimizer.egg-info/dependency_links.txt
-genoptimizer.egg-info/top_level.txt
