@@ -207,7 +207,6 @@ def main(args):
         
         net.train()
         train_loss = 0
-        total_batches = 0
         
         for batch_idx, (inputs, targets) in enumerate(tqdm(trainloader, desc=f'Epoch {epoch}')):
             inputs, targets = inputs.to(device), targets.to(device)
@@ -228,9 +227,9 @@ def main(args):
                 
                 optimizer.step()
                 optimizer.zero_grad()
-                total_batches += 1
             
-            if (batch_idx + 1) % (len(trainloader) // 10) == 0:
+            # Print progress every 10% of the epoch
+            if (batch_idx + 1) % max(1, len(trainloader) // 10) == 0:
                 avg_loss = train_loss / (batch_idx + 1)
                 print(f'Epoch: {epoch} | Train Loss: {avg_loss:.6f}')
     

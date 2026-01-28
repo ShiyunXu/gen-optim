@@ -78,15 +78,15 @@ def lr_parabola(
             if len(next_data) == 2 and task == 'image_cls':
                 inputs = next_data[0].to(device)
                 targets = next_data[1].to(device)
-            if len(next_data) == 2 and task == 'time_series':
+            elif len(next_data) == 2 and task == 'time_series':
                 inputs = next_data[0].to(device)
                 targets = next_data[1].to(device)
-            if len(next_data) > 2 and task == 'NLG':
+            elif len(next_data) > 2 and task == 'NLG':
                 # next_data = {key: value for key, value in next_data.items()}
                 inputs = next_data['input'].to(device)
                 targets = next_data['target'].to(device)
                 masks = next_data['mask'].to(device)
-            if task == 'NLU':
+            elif task == 'NLU':
                 batch = next_data.to(device)
 
             for j, ratio in enumerate(lr_ratio_list):
