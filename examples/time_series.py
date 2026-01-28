@@ -224,7 +224,7 @@ def main(args):
                         # Horizon-aware learning rate schedule (linear decay from 1 to 0)
                         scale_list = np.linspace(1, 0, args.epochs + 1)[:-1]
                         lr_parabola(net, optimizer, criterion, n_acc_steps, 
-                                  tr_iter=tr_iter, task='time_series', scale=scale_list[epoch])
+                                  tr_iter=tr_iter, device=device, task='time_series', scale=scale_list[epoch])
                 
                 optimizer.step()
                 optimizer.zero_grad()
