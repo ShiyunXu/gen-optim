@@ -15,6 +15,7 @@ This repository contains the code and examples for Generalized Newton's method a
 - 📊 Natural language understanding (SST2/QNLI/MNLI... datasets with BERT/RoBERTa models)
 - 🕵️‍♂️ Object detection / Instance segmentation
 - 🎯 Recommendation system
+- 📈 Time-series modeling (regression tasks with 1D-CNN/Transformer models)
 
 Example scripts are provided for each task in the `examples/` directory. The core implementation of GeN optimizer can be found in `GeN/`, which roughly has the same speed and memory cost as the base optimizers.
 

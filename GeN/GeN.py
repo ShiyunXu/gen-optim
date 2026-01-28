@@ -39,7 +39,7 @@ def lr_parabola(
         grad_accumulation_steps (int, optional): Number of gradient accumulation steps. Default is 1.
         tr_iter (iterator, optional): Training data iterator for multiple forward passes on the same batch.
         device (str, optional): Device to use ('cuda' or 'cpu'). Default is 'cuda'.
-        task (str, optional): Task type, one of 'image_cls', 'NLG', 'NLU'. Customized task can be added by wrapping the forward pass.
+        task (str, optional): Task type, one of 'image_cls', 'NLG', 'NLU', 'time_series'. Customized task can be added by wrapping the forward pass.
         scale (float, optional): Dependence on training horizon. Default is 1.0 (no dependence). Alternatively, set to a hyper-parameter-free decay from 1 to 0, e.g. 1-t/T.
         lr_factor (list, optional): List of candidate learning rate multipliers. Default is [-1,0,1].
         verbose(bool, optional): Whether to print learning rates and losses. Default is False.
@@ -78,12 +78,15 @@ def lr_parabola(
             if len(next_data) == 2 and task == 'image_cls':
                 inputs = next_data[0].to(device)
                 targets = next_data[1].to(device)
-            if len(next_data) > 2 and task == 'NLG':
+            elif len(next_data) == 2 and task == 'time_series':
+                inputs = next_data[0].to(device)
+                targets = next_data[1].to(device)
+            elif len(next_data) > 2 and task == 'NLG':
                 # next_data = {key: value for key, value in next_data.items()}
                 inputs = next_data['input'].to(device)
                 targets = next_data['target'].to(device)
                 masks = next_data['mask'].to(device)
-            if task == 'NLU':
+            elif task == 'NLU':
                 batch = next_data.to(device)
 
             for j, ratio in enumerate(lr_ratio_list):
@@ -93,6 +96,9 @@ def lr_parabola(
                         # in-place operation to create param.data <-- w_t-ratio*lr*g
 
                 if task == 'image_cls':
+                    outputs = net(inputs)
+                    loss_temp = criterion(outputs, targets) # need to return torch.tensor
+                elif task == 'time_series':
                     outputs = net(inputs)
                     loss_temp = criterion(outputs, targets) # need to return torch.tensor
                 elif task == 'NLG':

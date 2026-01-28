@@ -1,5 +1,37 @@
 # Examples with GeN
 
+## Time-Series Modeling
+We provide a script in `time_series.py` that demonstrates how to use GeN optimizer for time-series regression tasks with 1D-CNN and Vanilla Transformer models (~5M parameters). This example shows how to replace AdamW with GeN for time-series forecasting.
+
+```bash
+# Train 1D-CNN with GeN optimizer
+python time_series.py --model cnn1d --dataset synthetic --epochs 50 --lr_scheduler GeN --lazy_freq 4
+
+# Train Vanilla Transformer with GeN optimizer
+python time_series.py --model transformer --dataset synthetic --epochs 50 --lr_scheduler GeN --lazy_freq 4
+
+# Compare with AdamW (without GeN)
+python time_series.py --model cnn1d --dataset synthetic --epochs 50 --lr_scheduler cosine --optim adamw
+```
+
+Key arguments:
+
+* `--model`: Model architecture, either `cnn1d` (1D-CNN) or `transformer` (Vanilla Transformer).
+* `--dataset`: Dataset to use, currently supports `synthetic` for demonstration.
+* `--seq_len`: Time-series sequence length; default is 100.
+* `--train_samples`: Number of training samples; default is 10000.
+* `--test_samples`: Number of test samples; default is 2000.
+* `--lr`: Learning rate; default is 1e-4.
+* `--bs`: Logical batch size; default is 256.
+* `--mini_bs`: Physical batch size for gradient accumulation; default is 64.
+* `--epochs`: Number of epochs; default is 50.
+* `--optim`: Base optimizer to use (`sgd` or `adamw`). For GeN, use base optimizers like adamw.
+* `--lazy_freq`: How often to update the learning rate with GeN; default is 4. Higher values update less frequently, saving training time.
+* `--lr_scheduler`: Learning rate scheduler. Use `GeN` for GeN, also supports `cosine`, `multistep`, and `none`.
+* `--seed`: Random seed for reproducibility.
+
+**Note**: This example uses synthetic time-series data. For real-world applications, replace the `TimeSeriesDataset` class with your own dataset loader.
+
 ## Image classification
 We provide scripts in `cv.py` that train any [TIMM model](https://github.com/huggingface/pytorch-image-models/tree/main/timm/models) on image classification datasets such as CIFAR10, CIFAR100, SVHN, ImageNet, Places365, INaturalist, etc. This script can test other learning-rate-free methods and heuristic learning rate schedules.
 ```plaintext
